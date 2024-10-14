@@ -91,4 +91,5 @@ jobs:
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
             -Dsonar.qualitygate.wait=true
             -Dsonar.test.inclusions=**/*_test.go
+            -Dsonar.exclusions="frontend/**/*"
             -Dsonar.go.coverage.reportPaths=coverage.out
