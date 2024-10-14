@@ -6,7 +6,7 @@ includes:
 env:
   CGO_ENABLED: 0
   GOOS: linux
-  GOARCH: amd64
+  GOARCH: '{{.ARCH | default ARCH}}'
   PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
 tasks:
