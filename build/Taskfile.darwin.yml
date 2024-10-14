@@ -5,7 +5,7 @@ includes:
 
 env:
   GOOS: darwin
-  CGO_ENABLED: 1
+  CGO_ENABLED: 0
   GOARCH: '{{.ARCH | default ARCH}}'
   PRODUCTION: '{{.PRODUCTION | default "false"}}'
   CGO_CFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=15.0{{end}}'
