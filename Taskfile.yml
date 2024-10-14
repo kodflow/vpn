@@ -1,0 +1,48 @@
+version: '3'
+
+silent: true
+includes:
+  common: ./build/Taskfile.common.yml
+  windows: ./build/Taskfile.windows.yml
+  darwin: ./build/Taskfile.darwin.yml
+  linux: ./build/Taskfile.linux.yml
+
+vars:
+  APP_NAME: "vpn"
+  BIN_DIR: "build/bin"
+  VITE_PORT: '{{.WAILS_VITE_PORT | default 9245}}'
+
+tasks:
+  default:
+    cmds:
+      - task -l
+  
+  test:
+    summary: Runs the tests
+    desc: This task runs the tests for the application.
+    cmds:
+      - task: "{{OS}}:test"
+
+  build:
+    summary: Builds the application
+    desc: This task builds the application for the current platform.
+    cmds:
+      - task: "{{OS}}:build"
+
+  package:
+    summary: Packages a production build of the application
+    desc: This task packages a production build of the application for the current platform.
+    cmds:
+      - task: "{{OS}}:package"
+
+  run:
+    summary: Runs the application
+    desc: This task runs the application for the current platform.
+    cmds:
+      - task: "{{OS}}:run"
+
+  dev:
+    summary: Runs the application in development mode
+    desc: This task runs the application in development mode for the current platform.
+    cmds:
+      - wails3 dev -config ./build/devmode.config.yaml -port {{.VITE_PORT}}
