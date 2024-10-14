@@ -5,9 +5,6 @@ includes:
 
 env:
   CGO_ENABLED: 1
-  CGO_CFLAGS: "-mmacosx-version-min=11.0"
-  CGO_LDFLAGS: "-mmacosx-version-min=11.0"
-  MACOSX_DEPLOYMENT_TARGET: "11.0"
 
 tasks:
   test:
@@ -21,6 +18,9 @@ tasks:
     env:
       GOOS: darwin
       GOARCH: '{{.ARCH | default ARCH}}'
+      CGO_CFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=11.0{{end}}'
+      CGO_LDFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=11.0{{end}}'
+      MACOSX_DEPLOYMENT_TARGET: '{{if eq .GOOS "darwin"}}11.0{{end}}'
 
   build:
     summary: Creates a production build of the application
@@ -35,6 +35,9 @@ tasks:
     env:
       GOOS: darwin
       GOARCH: '{{.ARCH | default ARCH}}'
+      CGO_CFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=11.0{{end}}'
+      CGO_LDFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=11.0{{end}}'
+      MACOSX_DEPLOYMENT_TARGET: '{{if eq .GOOS "darwin"}}11.0{{end}}'
 
   package:
     summary: Packages a production build of the application into a `.app` bundle
