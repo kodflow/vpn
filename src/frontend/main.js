@@ -1,5 +1,5 @@
 import {Events} from "@wailsio/runtime";
-import { Hello } from "./bindings/github.com/kodflow/vpn/src/backend/services";
+import { Hello } from "./bindings/github.com/kodflow/vpn/src/backend/ui/service";
 
 const resultElement = document.getElementById('result');
 const timeElement = document.getElementById('time');
