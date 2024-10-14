@@ -136,18 +136,16 @@ jobs:
           go install github.com/wailsapp/wails/v3/cmd/wails3@v3-alpha
 
       - name: Install dependencies on macOS
-        if: matrix.platform == 'macos-latest'
+        if: matrix.platform == 'macos-latest' || matrix.platform == 'macos-13'
         run: |
-          brew install gtk+3
-          brew install webkit2gtk
+          brew install gtk+3 webkitgtk
           go install gotest.tools/gotestsum@latest
           go install github.com/wailsapp/wails/v3/cmd/wails3@v3-alpha
 
       - name: Install dependencies on Windows
         if: matrix.platform == 'windows-latest'
         run: |
-          choco install gtk
-          choco install webkit2gtk
+          choco install gt webkit2gtk
           go install gotest.tools/gotestsum@latest
           go install github.com/wailsapp/wails/v3/cmd/wails3@v3-alpha
 
