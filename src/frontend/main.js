@@ -1,5 +1,5 @@
-import {GreetService} from "./bindings/changeme";
 import {Events} from "@wailsio/runtime";
+import { Hello } from "./bindings/github.com/kodflow/vpn/src/backend/services";
 
 const resultElement = document.getElementById('result');
 const timeElement = document.getElementById('time');
@@ -9,7 +9,8 @@ window.doGreet = () => {
     if (!name) {
         name = 'anonymous';
     }
-    GreetService.Greet(name).then((result) => {
+
+    Hello.World(name).then((result) => {
         resultElement.innerText = result;
     }).catch((err) => {
         console.log(err);

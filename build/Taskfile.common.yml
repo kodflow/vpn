@@ -19,7 +19,7 @@ tasks:
 
   install:frontend:deps:
     summary: Install frontend dependencies
-    dir: frontend
+    dir: src/frontend
     sources:
       - package.json
       - package-lock.json
@@ -33,7 +33,7 @@ tasks:
 
   build:frontend:
     summary: Build the frontend project
-    dir: frontend
+    dir: src/frontend
     sources:
       - "**/*"
     generates:
@@ -51,9 +51,9 @@ tasks:
       - go.mod
       - go.sum
     generates:
-      - "frontend/bindings/**/*"
+      - "src/frontend/bindings/**/*"
     cmds:
-      - wails3 generate bindings -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}
+      - wails3 generate bindings ./... -d src/frontend/bindings -v -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}
 
   generate:icons:
     summary: Generates Windows `.ico` and Mac `.icns` files from an image
@@ -68,7 +68,7 @@ tasks:
 
   dev:frontend:
     summary: Runs the frontend in development mode
-    dir: frontend
+    dir: src/frontend
     deps:
       - task: install:frontend:deps
     cmds:

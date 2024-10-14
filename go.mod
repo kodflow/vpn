@@ -1,4 +1,4 @@
-module changeme
+module github.com/kodflow/vpn
 
 go 1.22.4
 
