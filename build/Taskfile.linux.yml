@@ -4,9 +4,9 @@ includes:
   common: Taskfile.common.yml
 
 env:
-  GOOS: linux
   CGO_ENABLED: 0
-  GOARCH: '{{.ARCH | default ARCH}}'
+  GOOS: linux
+  GOARCH: amd64
   PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
 tasks:

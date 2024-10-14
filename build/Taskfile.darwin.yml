@@ -4,8 +4,8 @@ includes:
   common: Taskfile.common.yml
 
 env:
-  GOOS: darwin
   CGO_ENABLED: 0
+  GOOS: darwin
   GOARCH: '{{.ARCH | default ARCH}}'
   PRODUCTION: '{{.PRODUCTION | default "false"}}'
   CGO_CFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=15.0{{end}}'

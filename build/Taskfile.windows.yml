@@ -4,8 +4,8 @@ includes:
   common: Taskfile.common.yml
 
 env:
-  GOOS: windows
   CGO_ENABLED: 0
+  GOOS: windows
   GOARCH: '{{.ARCH | default ARCH}}'
   PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
@@ -15,6 +15,7 @@ tasks:
     deps:
       - task: common:build:frontend
     cmds:
+      - go clean -cache -modcache -i -r
       - gotestsum -f github-actions -- -v $(go list ./... | grep -vE "vendor") -coverprofile={{.TASKFILE_DIR}}/../coverage.out -covermode=atomic
     vars:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
