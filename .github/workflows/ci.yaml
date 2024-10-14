@@ -93,3 +93,23 @@ jobs:
             -Dsonar.test.inclusions=**/*_test.go
             -Dsonar.exclusions=src/frontend/**/*
             -Dsonar.go.coverage.reportPaths=coverage.out
+
+  build:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-13'
+          - platform: 'macos-latest'
+          - platform: 'ubuntu-latest'
+          - platform: 'windows-latest'
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Download project from Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: project
+          path: .
