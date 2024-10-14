@@ -1,4 +1,4 @@
-package components
+package service
 
 type Hello struct{}
 
