@@ -6,11 +6,11 @@ includes:
 env:
   GOOS: darwin
   CGO_ENABLED: 1
-  CGO_CFLAGS: "-mmacosx-version-min=15.0"
-  CGO_LDFLAGS: "-mmacosx-version-min=15.0"
-  MACOSX_DEPLOYMENT_TARGET: "15.0"
   GOARCH: '{{.ARCH | default ARCH}}'
   PRODUCTION: '{{.PRODUCTION | default "false"}}'
+  CGO_CFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=15.0{{end}}'
+  CGO_LDFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=15.0{{end}}'
+  MACOSX_DEPLOYMENT_TARGET: '{{if eq .GOOS "darwin"}}15.0{{end}}'
 
 tasks:
   test:

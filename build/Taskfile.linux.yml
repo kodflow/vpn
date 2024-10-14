@@ -7,6 +7,7 @@ env:
   GOOS: linux
   CGO_ENABLED: 1
   GOARCH: '{{.ARCH | default ARCH}}'
+  PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
 tasks:
   test:
