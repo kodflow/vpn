@@ -1,0 +1,8 @@
+.task
+bin
+dist
+node_modules
+.DS_store
+coverage.out
+bindings
+vendor
