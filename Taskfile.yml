@@ -17,7 +17,7 @@ tasks:
     cmds:
       - task -l
   
-  test:
+  tests:
     summary: Runs the tests
     desc: This task runs the tests for the application.
     cmds:
