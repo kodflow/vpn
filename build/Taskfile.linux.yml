@@ -6,6 +6,7 @@ includes:
 tasks:
   test:
     cmds:
+      - task: common:build:frontend
       - task: common:test
 
   build:
