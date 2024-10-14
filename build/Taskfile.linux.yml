@@ -3,12 +3,6 @@ version: '3'
 includes:
   common: Taskfile.common.yml
 
-env:
-  CGO_ENABLED: 0
-  GOOS: linux
-  GOARCH: '{{.ARCH | default ARCH}}'
-  PRODUCTION: '{{.PRODUCTION | default "false"}}'
-
 tasks:
   test:
     summary: Runs the tests with coverage and gotestsum
@@ -18,6 +12,11 @@ tasks:
       - gotestsum -f github-actions -- -v $(go list ./... | grep -vE "vendor") -coverprofile={{.TASKFILE_DIR}}/../coverage.out -covermode=atomic
     vars:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
+    env:
+      CGO_ENABLED: 1
+      GOOS: linux
+      GOARCH: '{{.ARCH | default ARCH}}'
+      PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
   build:
     summary: Builds the application for Linux
@@ -30,6 +29,9 @@ tasks:
     vars:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
     env:
+      CGO_ENABLED: 1
+      GOOS: linux
+      GOARCH: '{{.ARCH | default ARCH}}'
       PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
   package:
