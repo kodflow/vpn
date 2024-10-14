@@ -9,7 +9,6 @@ tasks:
     sources:
       - go.mod
     cmds:
-      - go clean -cache -modcache -i -r
       - go mod tidy
 
   install:frontend:deps:
