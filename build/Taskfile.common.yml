@@ -47,7 +47,7 @@ tasks:
     generates:
       - "src/frontend/bindings/**/*"
     cmds:
-      - wails3 generate bindings .src/backend/ui/service/... -d src/frontend/bindings -v -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}
+      - wails3 generate bindings ./... -d src/frontend/bindings -v -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}
 
   generate:icons:
     summary: Generates Windows `.ico` and Mac `.icns` files from an image
