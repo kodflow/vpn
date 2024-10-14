@@ -1,12 +1,6 @@
 version: '3'
 
 tasks:
-  test:
-    summary: Runs the tests
-    desc: This task runs the tests for the application.
-    cmds:
-      - gotestsum -f github-actions -- -v $(go list ./... | grep -vE "vendor") -coverprofile={{.TASKFILE_DIR}}/../coverage.out -covermode=atomic
-
   go:mod:tidy:
     summary: Runs `go mod tidy`
     internal: true

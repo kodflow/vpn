@@ -3,11 +3,24 @@ version: '3'
 includes:
   common: Taskfile.common.yml
 
+env:
+  CGO_ENABLED: 1
+  CGO_CFLAGS: "-mmacosx-version-min=11.0"
+  CGO_LDFLAGS: "-mmacosx-version-min=11.0"
+  MACOSX_DEPLOYMENT_TARGET: "11.0"
+
 tasks:
   test:
-    cmds:
+    summary: Runs the tests with coverage and gotestsum
+    deps:
       - task: common:build:frontend
-      - task: common:test
+    cmds:
+      - gotestsum -f github-actions -- -v $(go list ./... | grep -vE "vendor") -coverprofile={{.TASKFILE_DIR}}/../coverage.out -covermode=atomic
+    vars:
+      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
+    env:
+      GOOS: darwin
+      GOARCH: '{{.ARCH | default ARCH}}'
 
   build:
     summary: Creates a production build of the application
@@ -21,12 +34,7 @@ tasks:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
     env:
       GOOS: darwin
-      CGO_ENABLED: 1
       GOARCH: '{{.ARCH | default ARCH}}'
-      CGO_CFLAGS: "-mmacosx-version-min=10.15"
-      CGO_LDFLAGS: "-mmacosx-version-min=10.15"
-      MACOSX_DEPLOYMENT_TARGET: "10.15"
-      PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
   package:
     summary: Packages a production build of the application into a `.app` bundle
