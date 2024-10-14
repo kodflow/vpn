@@ -3,11 +3,21 @@ version: '3'
 includes:
   common: Taskfile.common.yml
 
+env:
+  GOOS: windows
+  CGO_ENABLED: 0
+  GOARCH: '{{.ARCH | default ARCH}}'
+  PRODUCTION: '{{.PRODUCTION | default "false"}}'
+
 tasks:
   test:
-    cmds:
+    summary: Runs the tests with coverage and gotestsum
+    deps:
       - task: common:build:frontend
-      - task: common:test
+    cmds:
+      - gotestsum -f github-actions -- -v $(go list ./... | grep -vE "vendor") -coverprofile={{.TASKFILE_DIR}}/../coverage.out -covermode=atomic
+    vars:
+      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
 
   build:
     summary: Builds the application for Windows
@@ -20,11 +30,6 @@ tasks:
       - go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/{{.APP_NAME}}.exe
     vars:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s -H windowsgui"{{else}}-gcflags=all="-l"{{end}}'
-    env:
-      GOOS: windows
-      CGO_ENABLED: 0
-      GOARCH: '{{.ARCH | default ARCH}}'
-      PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
   package:
     summary: Packages a production build of the application into a `.exe` bundle

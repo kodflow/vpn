@@ -4,7 +4,13 @@ includes:
   common: Taskfile.common.yml
 
 env:
+  GOOS: darwin
   CGO_ENABLED: 1
+  CGO_CFLAGS: "-mmacosx-version-min=15.0"
+  CGO_LDFLAGS: "-mmacosx-version-min=15.0"
+  MACOSX_DEPLOYMENT_TARGET: "15.0"
+  GOARCH: '{{.ARCH | default ARCH}}'
+  PRODUCTION: '{{.PRODUCTION | default "false"}}'
 
 tasks:
   test:
@@ -15,12 +21,6 @@ tasks:
       - gotestsum -f github-actions -- -v $(go list ./... | grep -vE "vendor") -coverprofile={{.TASKFILE_DIR}}/../coverage.out -covermode=atomic
     vars:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
-    env:
-      GOOS: darwin
-      GOARCH: '{{.ARCH | default ARCH}}'
-      CGO_CFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=11.0{{end}}'
-      CGO_LDFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=11.0{{end}}'
-      MACOSX_DEPLOYMENT_TARGET: '{{if eq .GOOS "darwin"}}11.0{{end}}'
 
   build:
     summary: Creates a production build of the application
@@ -32,12 +32,6 @@ tasks:
       - go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/{{.APP_NAME}} ./src/backend 
     vars:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
-    env:
-      GOOS: darwin
-      GOARCH: '{{.ARCH | default ARCH}}'
-      CGO_CFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=11.0{{end}}'
-      CGO_LDFLAGS: '{{if eq .GOOS "darwin"}}-mmacosx-version-min=11.0{{end}}'
-      MACOSX_DEPLOYMENT_TARGET: '{{if eq .GOOS "darwin"}}11.0{{end}}'
 
   package:
     summary: Packages a production build of the application into a `.app` bundle
