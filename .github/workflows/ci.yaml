@@ -37,7 +37,9 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup dependencies
-        run: go install gotest.tools/gotestsum@latest
+        run: |
+            go install gotest.tools/gotestsum@latest
+            go install github.com/wailsapp/wails/v3/cmd/wails3@v3-alpha
 
       - name: Run all the tests
         run: task tests
