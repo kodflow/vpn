@@ -38,7 +38,7 @@ jobs:
 
       - name: Setup dependencies
         run: |
-            apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
+            sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
             go install gotest.tools/gotestsum@latest
             go install github.com/wailsapp/wails/v3/cmd/wails3@v3-alpha
 
