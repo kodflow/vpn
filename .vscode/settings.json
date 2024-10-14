@@ -1,0 +1,9 @@
+{
+    "files.exclude": {
+      "src/frontend/node_modules": true,
+      "src/frontend/dist": false,
+      "src/frontend/package-lock.json": true,
+      ".task": true
+    }
+  }
+  
