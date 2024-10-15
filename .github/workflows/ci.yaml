@@ -149,6 +149,10 @@ jobs:
           go install gotest.tools/gotestsum@latest
           go install github.com/wailsapp/wails/v3/cmd/wails3@v3-alpha
 
+      - name: Set executable permissions for vite (Linux/Mac)
+        if: matrix.platform != 'windows-latest'
+        run: chmod -R +x ./src/frontend/node_modules/.bin/
+          
       - name: Build the project
         run: task build
 
