@@ -156,7 +156,7 @@ jobs:
           choco install gt webkit2gtk
           go install gotest.tools/gotestsum@latest
           go install github.com/wailsapp/wails/v3/cmd/wails3@v3-alpha
-          rm -rf src/frontend/node_modules
+          Remove-Item -Recurse -Force .\src\frontend\node_modules
           npm install --prefix src/frontend
 
       - name: Set executable permissions for vite (Linux/Mac)
