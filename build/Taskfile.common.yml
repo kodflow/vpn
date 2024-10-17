@@ -1,23 +1,5 @@
 version: '3'
 
-globals:
-  paths:
-    frontend: src/frontend
-    bindings: src/frontend/bindings
-    dist: dist
-    build: build
-
-preconditions:
-  npm_installed:
-    - sh: npm version
-      msg: "Looks like npm isn't installed. Npm is part of the Node installer: https://nodejs.org/en/download/"
-  go_installed:
-    - sh: go version
-      msg: "Go isn't installed. Install it from: https://golang.org/doc/install"
-  wails_installed:
-    - sh: wails3 --version
-      msg: "Looks like wails3 isn't installed. Install it from: https://wails.io/docs/gettingstarted/installation/"
-
 tasks:
   go:mod:tidy:
     summary: Runs `go mod tidy`
@@ -26,40 +8,33 @@ tasks:
       - go.sum
     sources:
       - go.mod
-    preconditions:
-      - go_installed
     cmds:
-      - set -e
       - go mod tidy
 
   install:frontend:deps:
     summary: Install frontend dependencies
     sources:
-      - "{{globals.paths.frontend}}/package.json"
-      - "{{globals.paths.frontend}}/package-lock.json"
+      - src/frontend/package.json
+      - src/frontend/package-lock.json
     generates:
-      - "{{globals.paths.frontend}}/node_modules/*"
+      - src/frontend/node_modules/*
     preconditions:
-      - npm_installed
+      - sh: npm version
+        msg: "Looks like npm isn't installed. Npm is part of the Node installer: https://nodejs.org/en/download/"
     cmds:
-      - set -e
-      - echo "Installing frontend dependencies..."
-      - npm ci --prefix {{globals.paths.frontend}}
+      - npm install --prefix src/frontend
 
   build:frontend:
     summary: Build the frontend project
     sources:
       - "**/*"
     generates:
-      - "{{globals.paths.dist}}/*"
+      - dist/*
     deps:
       - task: install:frontend:deps
       - task: generate:bindings
-      - task: generate:icons
     cmds:
-      - set -e
-      - echo "Building frontend..."
-      - npm run build -q --prefix {{globals.paths.frontend}}
+      - npm run build -q --prefix src/frontend
 
   generate:bindings:
     summary: Generates bindings for the frontend
@@ -68,29 +43,25 @@ tasks:
       - go.mod
       - go.sum
     generates:
-      - "{{globals.paths.bindings}}/**/*"
+      - "src/frontend/bindings/**/*"
     cmds:
-      - set -e
-      - wails3 generate bindings ./... -d {{globals.paths.bindings}} -v -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}
+      - wails3 generate bindings ./... -d src/frontend/bindings -v -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}
 
   generate:icons:
     summary: Generates Windows `.ico` and Mac `.icns` files from an image
-    dir: "{{globals.paths.build}}"
+    dir: build
     sources:
       - "appicon.png"
     generates:
       - "icons.icns"
       - "icons.ico"
     cmds:
-      - set -e
       - wails3 generate icons -input appicon.png
 
   dev:frontend:
     summary: Runs the frontend in development mode
-    dir: "{{globals.paths.frontend}}"
+    dir: src/frontend
     deps:
       - task: install:frontend:deps
     cmds:
-      - set -e
-      - echo "Running frontend in development mode..."
       - npm run dev -- --port {{.VITE_PORT}} --strictPort
