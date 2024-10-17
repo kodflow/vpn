@@ -13,30 +13,28 @@ tasks:
 
   install:frontend:deps:
     summary: Install frontend dependencies
-    dir: src/frontend
     sources:
-      - package.json
-      - package-lock.json
+      - src/frontend/package.json
+      - src/frontend/package-lock.json
     generates:
-      - node_modules/*
+      - src/frontend/node_modules/*
     preconditions:
       - sh: npm version
         msg: "Looks like npm isn't installed. Npm is part of the Node installer: https://nodejs.org/en/download/"
     cmds:
-      - npm install
+      - npm install --prefix src/frontend
 
   build:frontend:
     summary: Build the frontend project
-    dir: src/frontend
     sources:
       - "**/*"
     generates:
-      - dist/*
+      - src/frontend/dist/*
     deps:
       - task: install:frontend:deps
       - task: generate:bindings
     cmds:
-      - npm run build -q
+      - npm run build --prefix src/frontend
 
   generate:bindings:
     summary: Generates bindings for the frontend
@@ -62,8 +60,7 @@ tasks:
 
   dev:frontend:
     summary: Runs the frontend in development mode
-    dir: src/frontend
     deps:
       - task: install:frontend:deps
     cmds:
-      - npm run dev -- --port {{.VITE_PORT}} --strictPort
+      - npm run dev -- --port {{.VITE_PORT}} --strictPort --prefix src/frontend
