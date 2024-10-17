@@ -166,7 +166,6 @@ jobs:
       - name: Build the project
         run: |
           ls -la
-          tree
           task build
 
       - name: Package the project
