@@ -157,8 +157,6 @@ jobs:
 
       - name: Build the project
         run: |
-          ls -la
-          pwd
           task build
 
       - name: Package the project
