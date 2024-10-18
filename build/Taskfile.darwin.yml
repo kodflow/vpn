@@ -9,6 +9,7 @@ tasks:
     deps:
       - task: common:build:frontend
     cmds:
+      - echo "gotestsum -f github-actions -- -v $(go list ./... | grep -vE "vendor") -coverprofile={{.TASKFILE_DIR}}/../coverage.out -covermode=atomic"
       - gotestsum -f github-actions -- -v $(go list ./... | grep -vE "vendor") -coverprofile={{.TASKFILE_DIR}}/../coverage.out -covermode=atomic
     vars:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
@@ -28,6 +29,7 @@ tasks:
       - task: common:build:frontend
       - task: common:generate:icons
     cmds:
+      - echo "go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/{{.APP_NAME}} ./src/backend"
       - go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/{{.APP_NAME}} ./src/backend 
     vars:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
@@ -47,16 +49,22 @@ tasks:
         vars:
           PRODUCTION: "true"
     cmds:
+      - echo "task: create:app:bundle"
       - task: create:app:bundle
 
   create:app:bundle:
     summary: Creates an `.app` bundle
     cmds:
+      - echo "mkdir -p {{.BIN_DIR}}/{{.APP_NAME}}.app/Contents/{MacOS,Resources}"
       - mkdir -p {{.BIN_DIR}}/{{.APP_NAME}}.app/Contents/{MacOS,Resources}
+      - echo "cp build/icons.icns {{.BIN_DIR}}/{{.APP_NAME}}.app/Contents/Resources"
       - cp build/icons.icns {{.BIN_DIR}}/{{.APP_NAME}}.app/Contents/Resources
+      - echo "cp {{.BIN_DIR}}/{{.APP_NAME}} {{.BIN_DIR}}/{{.APP_NAME}}.app/Contents/MacOS"
       - cp {{.BIN_DIR}}/{{.APP_NAME}} {{.BIN_DIR}}/{{.APP_NAME}}.app/Contents/MacOS
+      - echo "cp build/Info.plist {{.BIN_DIR}}/{{.APP_NAME}}.app/Contents"
       - cp build/Info.plist {{.BIN_DIR}}/{{.APP_NAME}}.app/Contents
 
   run:
     cmds:
+      - echo "{{.BIN_DIR}}/{{.APP_NAME}}"
       - '{{.BIN_DIR}}/{{.APP_NAME}}'

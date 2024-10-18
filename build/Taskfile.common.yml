@@ -9,6 +9,7 @@ tasks:
     sources:
       - go.mod
     cmds:
+      - echo "go mod tidy"
       - go mod tidy
 
   install:frontend:deps:
@@ -22,6 +23,7 @@ tasks:
       - sh: npm version
         msg: "Looks like npm isn't installed. Npm is part of the Node installer: https://nodejs.org/en/download/"
     cmds:
+      - echo "npm install --prefix src/frontend"
       - npm install --prefix src/frontend
 
   build:frontend:
@@ -34,6 +36,7 @@ tasks:
       - task: install:frontend:deps
       - task: generate:bindings
     cmds:
+      - echo "npm run build --prefix src/frontend"
       - npm run build --prefix src/frontend
 
   generate:bindings:
@@ -45,6 +48,7 @@ tasks:
     generates:
       - "src/frontend/bindings/**/*"
     cmds:
+      - echo "wails3 generate bindings ./... -d src/frontend/bindings -v -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}"
       - wails3 generate bindings ./... -d src/frontend/bindings -v -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}
 
   generate:icons:
@@ -56,6 +60,7 @@ tasks:
       - "icons.icns"
       - "icons.ico"
     cmds:
+      - echo "wails3 generate icons -input appicon.png"
       - wails3 generate icons -input appicon.png
 
   dev:frontend:
@@ -63,4 +68,5 @@ tasks:
     deps:
       - task: install:frontend:deps
     cmds:
+      - echo "npm run dev -- --port {{.VITE_PORT}} --strictPort --prefix src/frontend"
       - npm run dev -- --port {{.VITE_PORT}} --strictPort --prefix src/frontend
