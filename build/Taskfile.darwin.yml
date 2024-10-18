@@ -49,7 +49,7 @@ tasks:
         vars:
           PRODUCTION: "true"
     cmds:
-      - echo "task: create:app:bundle"
+      - echo "create:app:bundle"
       - task: create:app:bundle
 
   create:app:bundle:

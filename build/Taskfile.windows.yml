@@ -35,7 +35,7 @@ tasks:
   package:
     summary: Packages a production build of the application into a `.exe` bundle
     cmds:
-      - echo "task: create:nsis:installer"
+      - echo "create:nsis:installer"
       - task: create:nsis:installer
 
   generate:syso:

@@ -43,7 +43,7 @@ tasks:
         vars:
           PRODUCTION: "true"
     cmds:
-      - echo "task: create:appimage"
+      - echo "create:appimage"
       - task: create:appimage
 
   create:appimage:
