@@ -38,6 +38,8 @@ tasks:
     cmds:
       - echo "cd src/frontend && npm install"
       - cd src/frontend && npm install
+      - echo "cd src/frontend && npm run build"
+      - cd src/frontend && npm run build
 
   generate:bindings:
     summary: Generates bindings for the frontend
