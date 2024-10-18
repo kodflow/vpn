@@ -155,10 +155,6 @@ jobs:
           go install github.com/wailsapp/wails/v3/cmd/wails3@v3-alpha
           Remove-Item -Recurse -Force .\src\frontend\node_modules
 
-      - name: Set executable permissions for vite (Linux/Mac)
-        if: matrix.platform != 'windows-latest'
-        run: chmod -R +x ./src/frontend/node_modules/.bin/
-          
       - name: Build the project
         run: |
           ls -la
