@@ -9,34 +9,37 @@ tasks:
     sources:
       - go.mod
     cmds:
+      - echo "go mod tidy"
       - go mod tidy
 
   install:frontend:deps:
     summary: Install frontend dependencies
-    dir: src/frontend
     sources:
-      - package.json
-      - package-lock.json
+      - src/frontend/package.json
+      - src/frontend/package-lock.json
     generates:
-      - node_modules/*
+      - src/frontend/node_modules/*
     preconditions:
       - sh: npm version
         msg: "Looks like npm isn't installed. Npm is part of the Node installer: https://nodejs.org/en/download/"
     cmds:
-      - npm install
+      - echo "cd src/frontend && npm install"
+      - cd src/frontend && npm install
 
   build:frontend:
     summary: Build the frontend project
-    dir: src/frontend
     sources:
       - "**/*"
     generates:
-      - dist/*
+      - src/frontend/dist/*
     deps:
       - task: install:frontend:deps
       - task: generate:bindings
     cmds:
-      - npm run build -q
+      - echo "cd src/frontend && npm install"
+      - cd src/frontend && npm install
+      - echo "cd src/frontend && npm run build"
+      - cd src/frontend && npm run build
 
   generate:bindings:
     summary: Generates bindings for the frontend
@@ -47,6 +50,7 @@ tasks:
     generates:
       - "src/frontend/bindings/**/*"
     cmds:
+      - echo "wails3 generate bindings ./... -d src/frontend/bindings -v -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}"
       - wails3 generate bindings ./... -d src/frontend/bindings -v -f '{{.BUILD_FLAGS}}'{{if .UseTypescript}} -ts{{end}}
 
   generate:icons:
@@ -58,12 +62,13 @@ tasks:
       - "icons.icns"
       - "icons.ico"
     cmds:
+      - echo "wails3 generate icons -input appicon.png"
       - wails3 generate icons -input appicon.png
 
   dev:frontend:
     summary: Runs the frontend in development mode
-    dir: src/frontend
     deps:
       - task: install:frontend:deps
     cmds:
-      - npm run dev -- --port {{.VITE_PORT}} --strictPort
+      - echo "npm run dev -- --port {{.VITE_PORT}} --strictPort --prefix src/frontend"
+      - npm run dev -- --port {{.VITE_PORT}} --strictPort --prefix src/frontend
